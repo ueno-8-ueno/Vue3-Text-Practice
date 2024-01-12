@@ -25,6 +25,18 @@ npm init vue@latest
 npm install
 ```
 
+### 余分なcssの削除
+`src/main.ts`のcss読み込みの行を削除する(p.47参照)
+```ts
+//import './assets/main.css' //ここを削除
+
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')
+
+```
+
 ### サーバ起動
 ```bash
 cd ${プロジェクトディレクトリ}
