@@ -22,6 +22,7 @@ npm init vue@latest
 
 ### パッケージのインストール
 ```bash
+cd ${プロジェクトディレクトリ}
 npm install
 ```
 
@@ -39,7 +40,6 @@ createApp(App).mount('#app')
 
 ### サーバ起動
 ```bash
-cd ${プロジェクトディレクトリ}
 npm run dev
 ```
 アクセス: http://localhost:5173/
