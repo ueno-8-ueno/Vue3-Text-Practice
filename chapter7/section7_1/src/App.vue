@@ -1,47 +1,71 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref, watchEffect, watch } from "vue";
+
+// 7.1.2
+const cocktailNo = ref(1);
+const priceMsg = ref("");
+/*watchEffect(
+  (): void => {
+    priceMsg.value = getCocktailInfo(cocktailNo.value);
+  }
+);*/
+setInterval(
+  (): void => {
+    cocktailNo.value = Math.round(Math.random() * 3) + 1;
+  },
+  1000
+);
+
+interface Cocktail{
+  id: number;
+  name: string;
+  price: number;
+}
+
+function getCocktailInfo(cocktailNo: number){
+  const cocktailDataListInit = new Map<number, Cocktail>();
+  cocktailDataListInit.set(1, {id: 1, name: "ホワイトレディ", price: 1200});
+  cocktailDataListInit.set(2, {id: 2, name: "ブルーハワイ", price: 1500});
+  cocktailDataListInit.set(3, {id: 3, name: "ニューヨーク", price: 1100});
+  cocktailDataListInit.set(4, {id: 4, name: "マティーニ", price: 1500});
+  const cocktail = cocktailDataListInit.get(cocktailNo);
+  let msg = "該当カクテルはありません。";
+  if(cocktail != undefined){
+    msg = `該当するカクテルは${cocktail.name}で、価格は${cocktail.price}円です。`;
+  }
+  return msg;
+}
+
+// 7.1.3
+/*watch(cocktailNo,
+  (): void => {
+    priceMsg.value = getCocktailInfo(cocktailNo.value);
+  }
+);*/
+
+// 7.1.4
+/*watch(cocktailNo,
+  (): void => {
+    priceMsg.value = getCocktailInfo(cocktailNo.value);
+  },
+  {immediate: true}
+);*/
+
+// 7.1.5
+watch(cocktailNo,
+  (newVal: number, oldVal: number): void => {
+    let msg = "前のカクテル: ";
+    msg += getCocktailInfo(oldVal);
+    msg += "現在のカクテル: ";
+    msg += getCocktailInfo(newVal);
+    priceMsg.value = msg;
+  }
+);
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  <!--7.1.2, 3, 4, 5-->
+  <p>現在のカクテル番号: {{ cocktailNo }}</p>
+  <p>{{ priceMsg }}</p>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
